@@ -1,7 +1,7 @@
 {
   "name": "@backstage/create-app",
   "description": "Create app package for Backstage",
-  "version": "0.3.7",
+  "version": "0.1.2",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -27,7 +27,7 @@
     "start": "nodemon --"
   },
   "dependencies": {
-    "@backstage/cli-common": "^0.1.1",
+    "@backstage/cli-common": "^0.1.2",
     "chalk": "^4.0.0",
     "commander": "^6.1.0",
     "fs-extra": "^9.0.0",
@@ -62,8 +62,8 @@
     "@backstage/plugin-proxy-backend": "^0.2.4",
     "@backstage/plugin-rollbar-backend": "^0.1.7",
     "@backstage/plugin-scaffolder": "^0.4.1",
-    "@backstage/plugin-search": "^0.2.6",
     "@backstage/plugin-scaffolder-backend": "^0.5.2",
+    "@backstage/plugin-search": "^0.2.6",
     "@backstage/plugin-tech-radar": "^0.3.3",
     "@backstage/plugin-techdocs": "^0.5.4",
     "@backstage/plugin-techdocs-backend": "^0.5.4",
