@@ -1,7 +1,7 @@
 {
   "name": "e2e-test",
   "description": "E2E test for verifying Backstage packages",
-  "version": "0.2.0",
+  "version": "0.1.2",
   "private": true,
   "homepage": "https://backstage.io",
   "repository": {
@@ -24,7 +24,7 @@
     "e2e-test": "bin/e2e-test"
   },
   "devDependencies": {
-    "@backstage/cli-common": "^0.1.1",
+    "@backstage/cli-common": "^0.1.2",
     "@types/fs-extra": "^9.0.1",
     "@types/node": "^13.7.2",
     "chalk": "^4.0.0",
