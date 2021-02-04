@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import platformPath from 'path';
-import fs from 'fs-extra';
-import unzipper, { Entry } from 'unzipper';
 import archiver from 'archiver';
+import fs from 'fs-extra';
+import platformPath from 'path';
 import { Readable } from 'stream';
+import unzipper, { Entry } from 'unzipper';
 import {
   ReadTreeResponse,
-  ReadTreeResponseFile,
   ReadTreeResponseDirOptions,
+  ResponseFile,
 } from '../types';
 
 // Matches a directory name + one `/` at the start of any string,
@@ -89,10 +89,10 @@ export class ZipArchiveResponse implements ReadTreeResponse {
     return true;
   }
 
-  async files(): Promise<ReadTreeResponseFile[]> {
+  async files(): Promise<ResponseFile[]> {
     this.onlyOnce();
 
-    const files = Array<ReadTreeResponseFile>();
+    const files = Array<ResponseFile>();
 
     await this.stream
       .pipe(unzipper.Parse())

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import tar, { Parse, ParseStream, ReadEntry } from 'tar';
-import platformPath from 'path';
-import fs from 'fs-extra';
-import { Readable, pipeline as pipelineCb } from 'stream';
-import { promisify } from 'util';
 import concatStream from 'concat-stream';
+import fs from 'fs-extra';
+import platformPath from 'path';
+import { pipeline as pipelineCb, Readable } from 'stream';
+import tar, { Parse, ParseStream, ReadEntry } from 'tar';
+import { promisify } from 'util';
 import {
   ReadTreeResponse,
-  ReadTreeResponseFile,
   ReadTreeResponseDirOptions,
+  ResponseFile,
 } from '../types';
 
 // Tar types for `Parse` is not a proper constructor, but it should be
@@ -70,10 +70,10 @@ export class TarArchiveResponse implements ReadTreeResponse {
     this.read = true;
   }
 
-  async files(): Promise<ReadTreeResponseFile[]> {
+  async files(): Promise<ResponseFile[]> {
     this.onlyOnce();
 
-    const files = Array<ReadTreeResponseFile>();
+    const files = Array<ResponseFile>();
     const parser = new TarParseStream();
 
     parser.on('entry', (entry: ReadEntry & Readable) => {
