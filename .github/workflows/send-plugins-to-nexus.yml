@@ -1,0 +1,36 @@
+name: Send plugins to nexus
+
+on:
+  push:
+    branch:
+      - backstage_master
+
+jobs:
+  send-nexus:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout your project
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Setup Yarn
+        shell: bash
+        run: npm i -g --force yarn
+
+      - name: Build plugins
+        shell: bash
+        run: |
+          yarn install
+          yarn tsc:full
+          yarn lerna -- run --ignore example-app build
+
+      - name: Publish nexus
+        shell: bash
+        run: yarn lerna -- publish from-package --yes --registry=$REGISTRY
+        env:
+          REGISTRY: ${{ secrets.URL_NEXUS }}
+          TOKEN: ${{ secrets.NEXUS_TOKEN }}
