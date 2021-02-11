@@ -14,9 +14,40 @@
  * limitations under the License.
  */
 
-/** Checks whether the given url is a valid host */
-export function isValidHost(url: string): boolean {
+import { ScmIntegration, ScmIntegrationsGroup } from './types';
+
+/** Checks whether the given argument is a valid URL hostname */
+export function isValidHost(host: string): boolean {
   const check = new URL('http://example.com');
-  check.host = url;
-  return check.host === url;
+  check.host = host;
+  return check.host === host;
+}
+
+/** Checks whether the given argument is a valid URL */
+export function isValidUrl(url: string): boolean {
+  try {
+    // eslint-disable-next-line no-new
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function basicIntegrations<T extends ScmIntegration>(
+  integrations: T[],
+  getHost: (integration: T) => string,
+): ScmIntegrationsGroup<T> {
+  return {
+    list(): T[] {
+      return integrations;
+    },
+    byUrl(url: string | URL): T | undefined {
+      const parsed = typeof url === 'string' ? new URL(url) : url;
+      return integrations.find(i => getHost(i) === parsed.hostname);
+    },
+    byHost(host: string): T | undefined {
+      return integrations.find(i => getHost(i) === host);
+    },
+  };
 }

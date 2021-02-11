@@ -14,28 +14,33 @@
  * limitations under the License.
  */
 
-import { CatalogApi, CatalogClient } from '@backstage/catalog-client';
+import { CatalogClient } from '@backstage/catalog-client';
 import {
   createApiFactory,
-  createApiRef,
   createPlugin,
   discoveryApiRef,
+  createComponentExtension,
+  createRoutableExtension,
+  identityApiRef,
 } from '@backstage/core';
-import { catalogRouteRef, entityRouteRef } from './routes';
+import {
+  catalogApiRef,
+  catalogRouteRef,
+  entityRouteRef,
+} from '@backstage/plugin-catalog-react';
+import { CatalogClientWrapper } from './CatalogClientWrapper';
 
-export const catalogApiRef = createApiRef<CatalogApi>({
-  id: 'plugin.catalog.service',
-  description:
-    'Used by the Catalog plugin to make requests to accompanying backend',
-});
-
-export const plugin = createPlugin({
+export const catalogPlugin = createPlugin({
   id: 'catalog',
   apis: [
     createApiFactory({
       api: catalogApiRef,
-      deps: { discoveryApi: discoveryApiRef },
-      factory: ({ discoveryApi }) => new CatalogClient({ discoveryApi }),
+      deps: { discoveryApi: discoveryApiRef, identityApi: identityApiRef },
+      factory: ({ discoveryApi, identityApi }) =>
+        new CatalogClientWrapper({
+          client: new CatalogClient({ discoveryApi }),
+          identityApi,
+        }),
     }),
   ],
   routes: {
@@ -43,3 +48,30 @@ export const plugin = createPlugin({
     catalogEntity: entityRouteRef,
   },
 });
+
+export const CatalogIndexPage = catalogPlugin.provide(
+  createRoutableExtension({
+    component: () =>
+      import('./components/CatalogPage').then(m => m.CatalogPage),
+    mountPoint: catalogRouteRef,
+  }),
+);
+
+export const CatalogEntityPage = catalogPlugin.provide(
+  createRoutableExtension({
+    component: () =>
+      import('./components/CatalogEntityPage/CatalogEntityPage').then(
+        m => m.CatalogEntityPage,
+      ),
+    mountPoint: entityRouteRef,
+  }),
+);
+
+export const EntityLinksCard = catalogPlugin.provide(
+  createComponentExtension({
+    component: {
+      lazy: () =>
+        import('./components/EntityLinksCard').then(m => m.EntityLinksCard),
+    },
+  }),
+);

@@ -1,5 +1,125 @@
 # @backstage/plugin-catalog-import
 
+## 0.4.0
+
+### Minor Changes
+
+- 6ed2b47d6: Include Backstage identity token in requests to backend plugins.
+- 68dd79d83: The plugin has been refactored and is now based on a configurable state machine of 'analyze', 'prepare', 'review' & 'finish'.
+  Depending on the outcome of the 'analyze' stage, different flows are selected ('single-location', 'multiple-locations', 'no-location').
+  Each flow can define it's own components that guide the user.
+
+  During the refactoring, the `catalogRouteRef` property of the `CatalogImportPage` has been removed, so the `App.tsx` of the backstage apps need to be updated:
+
+  ```diff
+  // packages/app/src/App.tsx
+
+       <Route
+         path="/catalog-import"
+  -      element={<CatalogImportPage catalogRouteRef={catalogRouteRef} />}
+  +      element={<CatalogImportPage />}
+       />
+  ```
+
+### Patch Changes
+
+- 753bb4c40: Flatten the options of the `CatalogImportPage` from the `options` property to the `pullRequest` property.
+
+  ```diff
+  - <CatalogImportPage options={{ pullRequest: { disable: true } }} />
+  + <CatalogImportPage pullRequest={{ disable: true }} />
+  ```
+
+- Updated dependencies [6ed2b47d6]
+- Updated dependencies [ffffea8e6]
+- Updated dependencies [72b96e880]
+- Updated dependencies [19d354c78]
+- Updated dependencies [b51ee6ece]
+  - @backstage/catalog-client@0.3.6
+  - @backstage/integration@0.4.0
+  - @backstage/plugin-catalog-react@0.0.3
+  - @backstage/core@0.6.1
+
+## 0.3.7
+
+### Patch Changes
+
+- ceef4dd89: Export _api_ (Client, API, ref) from the catalog import plugin.
+- b712841d6: Migrated to new composability API, exporting the plugin instance as `catalogImportPlugin`, and the page as `CatalogImportPage`.
+- 019fe39a0: Switch dependency from `@backstage/plugin-catalog` to `@backstage/plugin-catalog-react`.
+- Updated dependencies [12ece98cd]
+- Updated dependencies [c4abcdb60]
+- Updated dependencies [d82246867]
+- Updated dependencies [7fc89bae2]
+- Updated dependencies [c810082ae]
+- Updated dependencies [5fa3bdb55]
+- Updated dependencies [6e612ce25]
+- Updated dependencies [025e122c3]
+- Updated dependencies [21e624ba9]
+- Updated dependencies [064c513e1]
+- Updated dependencies [da9f53c60]
+- Updated dependencies [32c95605f]
+- Updated dependencies [7881f2117]
+- Updated dependencies [3149bfe63]
+- Updated dependencies [54c7d02f7]
+- Updated dependencies [2e62aea6f]
+- Updated dependencies [11cb5ef94]
+  - @backstage/core@0.6.0
+  - @backstage/integration@0.3.2
+  - @backstage/plugin-catalog-react@0.0.2
+  - @backstage/theme@0.2.3
+  - @backstage/catalog-model@0.7.1
+
+## 0.3.6
+
+### Patch Changes
+
+- 9dd057662: Upgrade [git-url-parse](https://www.npmjs.com/package/git-url-parse) to [v11.4.4](https://github.com/IonicaBizau/git-url-parse/pull/125) which fixes parsing an Azure DevOps branch ref.
+- Updated dependencies [6800da78d]
+- Updated dependencies [9dd057662]
+- Updated dependencies [0b1182346]
+  - @backstage/integration@0.3.1
+  - @backstage/plugin-catalog@0.2.14
+
+## 0.3.5
+
+### Patch Changes
+
+- 2b514d532: Modifying import functionality to register existing catalog-info.yaml if one exists in given GitHub repository
+- Updated dependencies [def2307f3]
+- Updated dependencies [efd6ef753]
+- Updated dependencies [0b135e7e0]
+- Updated dependencies [593632f07]
+- Updated dependencies [33846acfc]
+- Updated dependencies [fa8ba330a]
+- Updated dependencies [a187b8ad0]
+- Updated dependencies [ed6baab66]
+- Updated dependencies [f04db53d7]
+- Updated dependencies [a93f42213]
+  - @backstage/catalog-model@0.7.0
+  - @backstage/core@0.5.0
+  - @backstage/integration@0.3.0
+  - @backstage/plugin-catalog@0.2.12
+
+## 0.3.4
+
+### Patch Changes
+
+- 34a01a171: Improve how URLs are analyzed for add/import
+- bc40ccecf: Add more generic descriptions for the catalog-import form.
+- 94fdf4955: Get rid of all usages of @octokit/types, and bump the rest of the octokit dependencies to the latest version
+- be5ac7fde: Remove dependency to `@backstage/plugin-catalog-backend`.
+- Updated dependencies [466354aaa]
+- Updated dependencies [f3b064e1c]
+- Updated dependencies [c00488983]
+- Updated dependencies [265a7ab30]
+- Updated dependencies [abbee6fff]
+- Updated dependencies [147fadcb9]
+  - @backstage/integration@0.2.0
+  - @backstage/catalog-model@0.6.1
+  - @backstage/plugin-catalog@0.2.11
+  - @backstage/core@0.4.4
+
 ## 0.3.3
 
 ### Patch Changes

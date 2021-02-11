@@ -1,5 +1,148 @@
 # @backstage/plugin-catalog
 
+## 0.3.1
+
+### Patch Changes
+
+- 6ed2b47d6: Include Backstage identity token in requests to backend plugins.
+- ca559171b: bug fix: 3310 fixes reloading entities with the default owned filter
+- f5e564cd6: Improve display of error messages
+- 1df75733e: Adds an `EntityLinksCard` component to display `entity.metadata.links` on entity pages. The new component is a companion for the new [Entity Links](https://backstage.io/docs/features/software-catalog/descriptor-format#links-optional) catalog model addition.
+
+  Here is an example usage within an `EntityPage.tsx`.
+
+  ```tsx
+  // in packages/app/src/components/catalog/EntityPage.tsx
+  const ComponentOverviewContent = ({ entity }: { entity: Entity }) => (
+    <Grid container spacing={3} alignItems="stretch">
+      <Grid item md={4} sm={6}>
+        <EntityLinksCard />
+        // or ...
+        <EntityLinksCard cols={{ md: 2, lg: 3, xl: 4 }} />
+      </Grid>
+    </Grid>
+  );
+  ```
+
+- e5da858d7: Removed unused functions and the moment library. #4278
+- 9230d07e7: Fix whitespace around variable in unregister error dialog box
+- Updated dependencies [6ed2b47d6]
+- Updated dependencies [72b96e880]
+- Updated dependencies [19d354c78]
+- Updated dependencies [b51ee6ece]
+  - @backstage/catalog-client@0.3.6
+  - @backstage/plugin-scaffolder@0.5.0
+  - @backstage/plugin-catalog-react@0.0.3
+  - @backstage/core@0.6.1
+
+## 0.3.0
+
+### Minor Changes
+
+- 019fe39a0: `@backstage/plugin-catalog` stopped exporting hooks and helpers for other
+  plugins. They are migrated to `@backstage/plugin-catalog-react`.
+  Change both your dependencies and imports to the new package.
+
+### Patch Changes
+
+- 7fc89bae2: Display owner and system as entity page links in the tables of the `api-docs`
+  plugin.
+
+  Move `isOwnerOf` and `getEntityRelations` from `@backstage/plugin-catalog` to
+  `@backstage/plugin-catalog-react` and export it from there to use it by other
+  plugins.
+
+- b37501a3d: Add `children` option to `addPage`, which will be rendered as the children of the `Route`.
+- b37501a3d: Finalize migration to new composability API, with the plugin instance now exported `catalogPlugin`.
+- 54c7d02f7: Introduce `TabbedLayout` for creating tabs that are routed.
+
+  ```typescript
+  <TabbedLayout>
+    <TabbedLayout.Route path="/example" title="Example tab">
+      <div>This is rendered under /example/anything-here route</div>
+    </TabbedLayout.Route>
+  </TabbedLayout>
+  ```
+
+- Updated dependencies [720149854]
+- Updated dependencies [12ece98cd]
+- Updated dependencies [d82246867]
+- Updated dependencies [7fc89bae2]
+- Updated dependencies [c810082ae]
+- Updated dependencies [5fa3bdb55]
+- Updated dependencies [6e612ce25]
+- Updated dependencies [025e122c3]
+- Updated dependencies [21e624ba9]
+- Updated dependencies [da9f53c60]
+- Updated dependencies [32c95605f]
+- Updated dependencies [7881f2117]
+- Updated dependencies [54c7d02f7]
+- Updated dependencies [019fe39a0]
+- Updated dependencies [11cb5ef94]
+  - @backstage/plugin-scaffolder@0.4.2
+  - @backstage/core@0.6.0
+  - @backstage/plugin-catalog-react@0.0.2
+  - @backstage/theme@0.2.3
+  - @backstage/catalog-model@0.7.1
+
+## 0.2.14
+
+### Patch Changes
+
+- 9dd057662: Upgrade [git-url-parse](https://www.npmjs.com/package/git-url-parse) to [v11.4.4](https://github.com/IonicaBizau/git-url-parse/pull/125) which fixes parsing an Azure DevOps branch ref.
+- 0b1182346: Add `EntityRefLinks` that shows one or multiple entity ref links.
+
+  Change the about card and catalog table to use `EntityRefLinks` due to the
+  nature of relations to support multiple relations per type.
+
+- Updated dependencies [9dd057662]
+  - @backstage/plugin-scaffolder@0.4.1
+
+## 0.2.13
+
+### Patch Changes
+
+- a4e636c8f: Hide the kind of owners in the about card if it's the default kind (group)
+- 099c5cf4f: Show the parent component in the about card (via partOf relationship)
+- a08db734c: Remove the `WelcomeBanner` that links to a plugin that is not longer wired into Backstage instances
+
+## 0.2.12
+
+### Patch Changes
+
+- 593632f07: Derive the list of to-delete entities in the `UnregisterEntityDialog` from the `backstage.io/managed-by-origin-location` annotation.
+  The dialog also rejects deleting entities that are created by the `bootstrap:bootstrap` location.
+- 33846acfc: Display the owner, system, and domain as links to the entity pages in the about card.
+  Only display fields in the about card that are applicable to the entity kind.
+- f04db53d7: Display systems in catalog table and make both owner and system link to the entity pages.
+  The owner field is now taken from the relations of the entity instead of its spec.
+- Updated dependencies [def2307f3]
+- Updated dependencies [efd6ef753]
+- Updated dependencies [a187b8ad0]
+- Updated dependencies [ed6baab66]
+- Updated dependencies [a93f42213]
+  - @backstage/catalog-model@0.7.0
+  - @backstage/core@0.5.0
+  - @backstage/plugin-scaffolder@0.4.0
+  - @backstage/catalog-client@0.3.5
+
+## 0.2.11
+
+### Patch Changes
+
+- c00488983: Enable catalog table actions for all location types.
+
+  The edit button has had support for other providers for a while and there is
+  no specific reason the View in GitHub cannot work for all locations. This
+  change also replaces the GitHub icon with the OpenInNew icon.
+
+- Updated dependencies [f3b064e1c]
+- Updated dependencies [265a7ab30]
+- Updated dependencies [abbee6fff]
+- Updated dependencies [147fadcb9]
+  - @backstage/catalog-model@0.6.1
+  - @backstage/core@0.4.4
+
 ## 0.2.10
 
 ### Patch Changes

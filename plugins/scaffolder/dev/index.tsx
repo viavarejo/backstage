@@ -14,7 +14,33 @@
  * limitations under the License.
  */
 
+import React from 'react';
 import { createDevApp } from '@backstage/dev-utils';
-import { plugin } from '../src/plugin';
+import { discoveryApiRef, identityApiRef } from '@backstage/core';
+import { CatalogClient } from '@backstage/catalog-client';
+import { catalogApiRef } from '@backstage/plugin-catalog-react';
+import { TemplateIndexPage, TemplatePage } from '../src/plugin';
+import { ScaffolderApi, scaffolderApiRef } from '../src';
 
-createDevApp().registerPlugin(plugin).render();
+createDevApp()
+  .registerApi({
+    api: catalogApiRef,
+    deps: { discoveryApi: discoveryApiRef },
+    factory: ({ discoveryApi }) => new CatalogClient({ discoveryApi }),
+  })
+  .registerApi({
+    api: scaffolderApiRef,
+    deps: { discoveryApi: discoveryApiRef, identityApi: identityApiRef },
+    factory: ({ discoveryApi, identityApi }) =>
+      new ScaffolderApi({ discoveryApi, identityApi }),
+  })
+  .addPage({
+    path: '/create',
+    title: 'Create',
+    element: <TemplateIndexPage />,
+  })
+  .addPage({
+    path: '/create/:templateName',
+    element: <TemplatePage />,
+  })
+  .render();

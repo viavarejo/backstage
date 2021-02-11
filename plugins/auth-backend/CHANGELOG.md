@@ -1,5 +1,117 @@
 # @backstage/plugin-auth-backend
 
+## 0.3.0
+
+### Minor Changes
+
+- 1deb31141: Remove undocumented scope (default) from the OIDC auth provider which was breaking some identity services. If your app relied on this scope, you can manually specify it by adding a new factory in `packages/app/src/apis.ts`:
+
+  ```
+  export const apis = [
+    createApiFactory({
+      api: oidcAuthApiRef,
+      deps: {
+        discoveryApi: discoveryApiRef,
+        oauthRequestApi: oauthRequestApiRef,
+        configApi: configApiRef,
+      },
+      factory: ({ discoveryApi, oauthRequestApi, configApi }) =>
+        OAuth2.create({
+          discoveryApi,
+          oauthRequestApi,
+          provider: {
+            id: 'oidc',
+            title: 'Your Identity Provider',
+            icon: OAuth2Icon,
+          },
+          defaultScopes: [
+            'default',
+            'openid',
+            'email',
+            'offline_access',
+          ],
+          environment: configApi.getOptionalString('auth.environment'),
+        }),
+    }),
+  ];
+  ```
+
+### Patch Changes
+
+- 6ed2b47d6: Include Backstage identity token in requests to backend plugins.
+- 07bafa248: Add configurable `scope` for oauth2 auth provider.
+
+  Some OAuth2 providers require certain scopes to facilitate a user sign-in using the Authorization Code flow.
+  This change adds the optional `scope` key to auth.providers.oauth2. An example is:
+
+  ```yaml
+  auth:
+    providers:
+      oauth2:
+        development:
+          clientId:
+            $env: DEV_OAUTH2_CLIENT_ID
+          clientSecret:
+            $env: DEV_OAUTH2_CLIENT_SECRET
+          authorizationUrl:
+            $env: DEV_OAUTH2_AUTH_URL
+          tokenUrl:
+            $env: DEV_OAUTH2_TOKEN_URL
+          scope: saml-login-selector openid profile email
+  ```
+
+  This tells the OAuth 2.0 AS to perform a SAML login and return OIDC information include the `profile`
+  and `email` claims as part of the ID Token.
+
+- Updated dependencies [6ed2b47d6]
+- Updated dependencies [ffffea8e6]
+- Updated dependencies [82b2c11b6]
+- Updated dependencies [965e200c6]
+- Updated dependencies [72b96e880]
+- Updated dependencies [5a5163519]
+  - @backstage/catalog-client@0.3.6
+  - @backstage/backend-common@0.5.3
+
+## 0.2.12
+
+### Patch Changes
+
+- d7b1d317f: Fixed serialization issue with caching of public keys in AWS ALB auth provider
+- 39b05b9ae: Use .text instead of .json for ALB key response
+- 4eaa06057: Fix AWS ALB issuer check
+- Updated dependencies [26a3a6cf0]
+- Updated dependencies [664dd08c9]
+- Updated dependencies [9dd057662]
+  - @backstage/backend-common@0.5.1
+
+## 0.2.11
+
+### Patch Changes
+
+- 0643a3336: Add AWS ALB OIDC reverse proxy authentication provider
+- a2291d7cc: Optional identity token authorization of api requests
+- Updated dependencies [def2307f3]
+- Updated dependencies [0b135e7e0]
+- Updated dependencies [294a70cab]
+- Updated dependencies [0ea032763]
+- Updated dependencies [5345a1f98]
+- Updated dependencies [09a370426]
+- Updated dependencies [a93f42213]
+  - @backstage/catalog-model@0.7.0
+  - @backstage/backend-common@0.5.0
+  - @backstage/catalog-client@0.3.5
+
+## 0.2.10
+
+### Patch Changes
+
+- 468579734: Allow blank certificates and support logout URLs in the SAML provider.
+- Updated dependencies [f3b064e1c]
+- Updated dependencies [abbee6fff]
+- Updated dependencies [147fadcb9]
+  - @backstage/catalog-model@0.6.1
+  - @backstage/backend-common@0.4.3
+
 ## 0.2.9
 
 ### Patch Changes

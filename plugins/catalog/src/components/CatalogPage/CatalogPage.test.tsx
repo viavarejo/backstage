@@ -28,11 +28,11 @@ import {
   ProfileInfo,
   storageApiRef,
 } from '@backstage/core';
+import { catalogApiRef } from '@backstage/plugin-catalog-react';
 import { MockStorageApi, wrapInTestApp } from '@backstage/test-utils';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import React from 'react';
 import { EntityFilterGroupsProvider } from '../../filter';
-import { catalogApiRef } from '../../plugin';
 import { CatalogPage } from './CatalogPage';
 
 describe('CatalogPage', () => {
@@ -127,5 +127,25 @@ describe('CatalogPage', () => {
     expect(await findByText(/Owned \(1\)/)).toBeInTheDocument();
     fireEvent.click(getByText(/All/));
     expect(await findByText(/All \(2\)/)).toBeInTheDocument();
+  });
+  // this test is for fixing the bug after favoriting an entity, the matching entities defaulting
+  // to "owned" filter and not based on the selected filter
+  it('should render the correct entities filtered on the selectedfilter', async () => {
+    const { findByText, findAllByTitle, getByText } = renderWrapped(
+      <CatalogPage />,
+    );
+    expect(await findByText(/Owned \(1\)/)).toBeInTheDocument();
+    expect(await findByText(/Starred/)).toBeInTheDocument();
+    fireEvent.click(getByText(/Starred/));
+    expect(await findByText(/Starred \(0\)/)).toBeInTheDocument();
+    fireEvent.click(getByText(/All/));
+    expect(await findByText(/All \(2\)/)).toBeInTheDocument();
+
+    const starredIcons = await findAllByTitle('Add to favorites');
+    fireEvent.click(starredIcons[0]);
+    expect(await findByText(/All \(2\)/)).toBeInTheDocument();
+
+    fireEvent.click(getByText(/Starred/));
+    waitFor(() => expect(findByText(/Starred \(1\)/)).toBeInTheDocument());
   });
 });
